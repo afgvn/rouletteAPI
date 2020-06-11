@@ -35,26 +35,38 @@ def openRoulute(Roulute_id):
 def betRoulute(Roulute_id , Client_id , Type_bet, Bet ,  Qty_bet ):
     RouluteOpenid = Roulute_id
     Bet_Id = Bet
-    Bet_State = "Error Roulute not exist -- bet   cancelled"
+    Bet_Message = "Error Roulute not exist -- bet   cancelled"
+    Bet_State = 4
     if  Roulute_id < len( rouleteSection.Rouletes ):
-            Bet_State = "Error Roulute its close --  bet  cancelled"
+            Bet_Message = "Error Roulute its close --  bet  cancelled"
+            Bet_State = 4
             if  rouleteSection.Rouletes[Roulute_id].state == 1:
                 newBetReturn = rouleteSection.Rouletes[Roulute_id].NewBet(  Client_id , Type_bet , Bet , Qty_bet )   #client , type , bet , Qty 
                 Bet_State = newBetReturn['Bet_State']
                 Bet_Id = newBetReturn['Bet_Id']
+                Bet_Message = newBetReturn['Bet_Message']
 
-
-    return jsonify( Roulute_id = RouluteOpenid , Bet_Id= Bet_Id , Bet_State = Bet_State  )
+    return jsonify( Roulute_id = RouluteOpenid , Bet_Id= Bet_Id , Bet_State = Bet_State  ,Bet_Message = Bet_Message )
 
 @app.route('/CloseBetRoulute/<int:Roulute_id>', methods=['GET', 'POST'])
 def CloseBetRoulute(Roulute_id  ):
     RouluteOpenid = Roulute_id
-    Bets_List = [
-        {'Bet_Id' : 1,'Client_id' : 23,'Type_bet' : 0,'Bet' : 3, 'Qty_bet' : 1000 , 'State_bet' : "Win" , 'Qty_win' : 1000 },
-        {'Bet_Id' : 2,'Client_id' : 56,'Type_bet' : 1,'Bet' : 0, 'Qty_bet' : 104500 , 'State_bet' : "lose" , 'Qty_win' : 0 }
-    ]
-
-    return jsonify( Roulute_id = RouluteOpenid , Bets_List= Bets_List   )
+    listBets = []
+    Numbre_play =  0
+    temp_Message = "Error Roulute not exist -- bet   cancelled"
+    temp_State = 'error'
+    if  Roulute_id < len( rouleteSection.Rouletes ):
+        temp_Message = "Error Roulute its close --  bet  cancelled"
+        temp_State = 'error'
+        closeRoulute = rouleteSection.Rouletes[Roulute_id].closeAndplay()
+        print(closeRoulute)
+        print(closeRoulute['Bets_List'])
+        RouluteOpenid = closeRoulute['Roulutte_id']
+        Numbre_play =  closeRoulute['Numbre_play']
+        for  VarBet in closeRoulute['Bets_List'] :
+            listBets.append({'MessageBet': VarBet.StringMessageBet() , 'StateBet': VarBet.state  })
+            
+    return jsonify( Roulute_id = RouluteOpenid , Bets_List= listBets , ResultPlay =  Numbre_play   )
 
 @app.route('/StateRoulutes', methods=['GET', 'POST'])
 def StateRoulutes( ):

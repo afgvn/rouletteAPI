@@ -30,6 +30,7 @@ class bet :
      
     def PlayBet (self , NumberPlayRolute):
         self.Qty_win = 0
+        self.state = 3
         if self.type == 0 :
             self.ColorBet( NumberPlayRolute )
         elif  self.type == 1 :
@@ -53,9 +54,6 @@ class bet :
         if NumberPlayRolute == self.bet :
             self.state = 2
             self.Qty_win = self.Qty * 36
-        elif self.bet == 1:
-            self.state = 2 
-            self.Qty_win = self.Qty * 36
          
         return 
 
@@ -67,7 +65,7 @@ class bet :
         elif self.type == 0  and not 0 <= self.bet < MaxNumberColors :  # color bet
             print("Invalid color")
             ValidState = 2
-        elif self.type == 1  and not  MinNumbreRolute <= self.bet < MaxNumbreRolute   : # number bet
+        elif self.type == 1  and not  MinNumbreRolute <= self.bet <= MaxNumbreRolute   : # number bet
             print("Invalid number")
             ValidState = 3
         elif self.Qty > MaxQtyBet :
@@ -108,15 +106,15 @@ class bet :
             tempMessageString = tempMessageString  +  ' Value Bet : $' +  str (self.Qty) 
         elif self.state == 2:
             tempMessageString = 'Your Win !!!!!!'
-            tempMessageString = tempMessageString + 'TypeBet : '+ self.StringTypeBet()
+            tempMessageString = tempMessageString + '  TypeBet : '+ self.StringTypeBet()
             tempMessageString = tempMessageString  +  ' Bet : ' +  self.StringBet()
             tempMessageString = tempMessageString  +  ' Value Bet : $' +  str (self.Qty)
             tempMessageString = tempMessageString  +  ' Value WIN : $' +  str (self.Qty_win)
         elif self.state == 3:
             tempMessageString = 'Your Loss !!!!!!'
-            tempMessageString = tempMessageString + 'TypeBet : '+ self.StringTypeBet()
-            tempMessageString = tempMessageString  +  'Bet : $' +  str (self.bet)
-            tempMessageString = tempMessageString  +  'Value Bet : $' +  str (self.Qty)
+            tempMessageString = tempMessageString + '  TypeBet : '+ self.StringTypeBet()
+            tempMessageString = tempMessageString  +  ' Bet # ' +  str (self.bet)
+            tempMessageString = tempMessageString  +  ' Value Bet : $' +  str (self.Qty)
         elif self.state == 4 : 
              tempMessageString = tempMessageString + " " +  self.StrinValidations()
         else : 
