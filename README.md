@@ -44,11 +44,12 @@ return:list od roulettes  with :  id for roulettes and  state in format json ,
 http://127.0.0.1:5000/CloseBetRoulutte/idRoulette
 function : close bet in a roulette  
 parameter : idRoulette
-return: list of the   with :  id for bet  , client id , type of bet and quanty of bet  , state of bet , and quanty of win  , and  id_roulette  in format json  
+return: list of the   with : bet , id for bet  , client id , type of bet and quanty of bet  , state of bet , and quanty of win  , and  id_roulette  in format json  
 
 {
   "Bets_List": [
     {
+      "Bet": 20,
       "Bet_Id": 1, 
       "Client_id": 23, 
       "Qty_bet": 1000, 
@@ -57,6 +58,7 @@ return: list of the   with :  id for bet  , client id , type of bet and quanty o
       "Type_bet": 0
     }, 
     {
+      "Bet": 20,
       "Bet_Id": 2, 
       "Client_id": 56, 
       "Qty_bet": 104500, 
@@ -69,12 +71,13 @@ return: list of the   with :  id for bet  , client id , type of bet and quanty o
 }
 
 
-http://127.0.0.1:5000/NewBetRoulutte/idRoulette/idCliente/TypeBet/BetQuanty
+http://127.0.0.1:5000/NewBetRoulutte/idRoulette/idCliente/TypeBet/Bet/BetQuanty
 function : create new bet in a roulette  
-parameter : idRoulette , idCliente , TypeBet , BetQuanty
+parameter : idRoulette , idCliente , TypeBet , Bet , BetQuanty
 return:   id for bet ,  state of the bet , id_roulette  in format json  
 
 {
+  "Bet": 20,
   "Bet_Id": 1, 
   "Bet_State": "Cancel", 
   "Roulutte_id": 5
