@@ -49,7 +49,6 @@ def betRoulute(Roulute_id , Client_id , Type_bet, Bet ,  Qty_bet ):
             Bet_Message = "Error Roulute its close --  bet  cancelled"
             Bet_State = 4
             if  actulaRoulute.state == 1:
-                print(actulaRoulute.BetsTable)
                 betData = { 'client' :  Client_id ,'type' : Type_bet , 'bet' : Bet , 'Qty' : Qty_bet  }
                 newBetReturn = actulaRoulute.NewBet(  betData )  
                 Bet_State = newBetReturn['Bet'].__dict__
