@@ -14,6 +14,7 @@ class bet :
         self.Qty = Qty
         self.Qty_win = 0
         self.state = 0
+
         print("test")
         if self.ValidBet() ==  0 :
             self.CreateBet()
@@ -31,6 +32,7 @@ class bet :
     def PlayBet (self , NumberPlayRolute):
         self.Qty_win = 0
         self.state = 3
+        print("estado play" +  str( self.state ) )
         if self.type == 0 :
             self.ColorBet( NumberPlayRolute )
         elif  self.type == 1 :
@@ -51,6 +53,7 @@ class bet :
 
     def NumberBet (self , NumberPlayRolute) :
         self.state = 3
+        print("estado bet" +  str( self.state ) )
         if NumberPlayRolute == self.bet :
             self.state = 2
             self.Qty_win = self.Qty * 36
@@ -80,7 +83,7 @@ class bet :
         return StrinValidations[ ( self.ValidBet()  ) ]
 
     def StrinStates(self):
-        StrinStates = ["Validaing" ,"Aceppt", "Win" , "Lose" , "Error"  ]
+        StrinStates = ["Validaing" ,"Aceppted", "Win" , "Lose" , "Error"  ]
         return StrinStates[ self.state  ]
 
     def StringBet(self):
@@ -100,6 +103,7 @@ class bet :
 
     def StringMessageBet(self):
         tempMessageString = self.StrinStates()
+        print("estado" +  str( self.state ) )
         if self.state == 0 or self.state == 1 :
             tempMessageString = tempMessageString + '  TypeBet : '+ self.StringTypeBet()
             tempMessageString = tempMessageString  +  ' Bet : ' +  self.StringBet()

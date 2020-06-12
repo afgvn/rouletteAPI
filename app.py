@@ -1,11 +1,10 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+import redis
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8u3rouhfkjdsfiluh'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 
-db = SQLAlchemy(app)
+db = redis.Redis('localhost')
 
 from routes import *
 
