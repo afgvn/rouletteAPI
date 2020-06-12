@@ -1,8 +1,5 @@
 # rouletteAPI
-Little API for play roulette 
-
-
-
+Little API for play roulette use redis 
 
 # dependecies 
  pip install flask
@@ -10,14 +7,14 @@ Little API for play roulette
 
 # URL for the api 
 
-http://127.0.0.1:5000/add
+http://127.0.0.1:5000/addRoulete
 function : create a new roulette  
 parameter : none 
 return:   id_roulette and state of roulette   in format json  
 
 {
-  "Roulutte_State": "close", 
-  "Roulutte_id": 10
+  "Roulute_State": "Close", 
+  "Roulute_id": 3
 }
 
 http://127.0.0.1:5000/open/idRoulette
@@ -26,24 +23,77 @@ parameter : idRoulette
 return:   id_roulette and state of roulette   in format json  
 
 {
-  "Roulutte_State": "open", 
-  "Roulutte_id": 5
+  "Roulute_Message": "Open", 
+  "Roulute_State": 1, 
+  "Roulute_id": 1
 }
+
+http://127.0.0.1:5000/deleteAllRouletes
+function : delee alld data 
+parameter : none
+return: Allempty message 
+
+{
+  "message": "Allempty"
+}
+
 
 http://127.0.0.1:5000/StateRouluttes
 function : list all the roulettes with state in list  
 parameter : none
-return:list od roulettes  with :  id for roulettes and  state in format json ,
-
+return:list od roulettes  with :  id for roulettes and  data for bets and message  in format json ,
 {
-  "Roulutte_List": [
+  "Roulute_List": [
     {
-      "Roulutte_Id": 1, 
-      "Roulutte_state": "open"
+      "Roulute_Data": {
+        "BetsTable": "bet3", 
+        "bets": [], 
+        "id": 3, 
+        "state": 0
+      }, 
+      "Roulute_Id": 3, 
+      "Roulute_Message": "Close"
     }, 
     {
-      "RoulutteBet_Id": 2, 
-      "Roulutte_state": "close"
+      "Roulute_Data": {
+        "BetsTable": "bet2", 
+        "bets": [], 
+        "id": 2, 
+        "state": 0
+      }, 
+      "Roulute_Id": 2, 
+      "Roulute_Message": "Close"
+    }, 
+    {
+      "Roulute_Data": {
+        "BetsTable": "bet1", 
+        "bets": [
+          {
+            "Qty": 2000, 
+            "Qty_win": 0, 
+            "bet": 13, 
+            "betTime": "2020-06-12T10:25:15-05:00", 
+            "client": 23, 
+            "id": 0, 
+            "state": 1, 
+            "type": 1
+          }
+        ], 
+        "id": 1, 
+        "state": 1
+      }, 
+      "Roulute_Id": 1, 
+      "Roulute_Message": "Open"
+    }, 
+    {
+      "Roulute_Data": {
+        "BetsTable": "bet0", 
+        "bets": [], 
+        "id": 0, 
+        "state": 0
+      }, 
+      "Roulute_Id": 0, 
+      "Roulute_Message": "Close"
     }
   ]
 }
@@ -56,25 +106,34 @@ return: list of the   with : bet , id for bet  , client id , type of bet and qua
 {
   "Bets_List": [
     {
-      "Bet": 20,
-      "Bet_Id": 1, 
-      "Client_id": 23, 
-      "Qty_bet": 1000, 
-      "Qty_win": 1000, 
-      "State_bet": "Win", 
-      "Type_bet": 0
+      "Bet": {
+        "Qty": 2000, 
+        "Qty_win": 0, 
+        "bet": 13, 
+        "betTime": "2020-06-12T10:19:09-05:00", 
+        "client": 23, 
+        "id": 1, 
+        "state": 3, 
+        "type": 1
+      }, 
+      "MessageBet": "Your Loss !!!!!!  TypeBet : Number Time : 2020-06-12T10:19:09-05:00 Bet # 13 Value Bet : $2000"
     }, 
     {
-      "Bet": 20,
-      "Bet_Id": 2, 
-      "Client_id": 56, 
-      "Qty_bet": 104500, 
-      "Qty_win": 0, 
-      "State_bet": "lose", 
-      "Type_bet": 1
+      "Bet": {
+        "Qty": 1000, 
+        "Qty_win": 0, 
+        "bet": 1, 
+        "betTime": "2020-06-12T10:18:56-05:00", 
+        "client": 23, 
+        "id": 0, 
+        "state": 3, 
+        "type": 1
+      }, 
+      "MessageBet": "Your Loss !!!!!!  TypeBet : Number Time : 2020-06-12T10:18:56-05:00 Bet # 1 Value Bet : $1000"
     }
   ], 
-  "Roulutte_id": 5
+  "ResultPlay": 27, 
+  "Roulute_id": 1
 }
 
 
@@ -84,8 +143,22 @@ parameter : idRoulette , idCliente , TypeBet , Bet , BetQuanty
 return:   id for bet ,  state of the bet , id_roulette  in format json  
 
 {
-  "Bet": 20,
-  "Bet_Id": 1, 
-  "Bet_State": "Cancel", 
-  "Roulutte_id": 5
+  "Bet": {
+    "Qty": 2000, 
+    "Qty_win": 0, 
+    "bet": 13, 
+    "betTime": "2020-06-12T10:25:15-05:00", 
+    "client": 23, 
+    "id": 0, 
+    "state": 1, 
+    "type": 1
+  }, 
+  "Bet_Id": 0, 
+  "Bet_Message": "Aceppted  TypeBet : Number Time : 2020-06-12T10:25:15-05:00 Bet : 13 Value Bet : $2000", 
+  "Roulute_id": 1
 }
+
+
+StatesRolute = ["Close","Open","Play"]
+StrinStatesbet = ["Validaing" ,"Aceppted", "Win" , "Lose" , "Error"  ]
+StrinValidationsbet = ["Valid","Not Valid Type","Not Valid Color 0-Red 1-Black","Not Valid Number range 0-36","Not Valid qty max value $10.000"]

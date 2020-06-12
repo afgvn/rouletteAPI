@@ -1,21 +1,20 @@
+import datetime
 
 MaxNumbreRolute=36
 MinNumbreRolute=0
 MaxQtyBet=10000
 MaxNumberColors=2
-
 class bet : 
 
-    def __init__(self, id , client , type , bet , Qty ):
-        self.id = id
-        self.type = type
-        self.bet = bet
-        self.client = client
-        self.Qty = Qty
+    def __init__(self, betData ):
+        self.id = betData['id']
+        self.type = betData['type']
+        self.bet = betData['bet']
+        self.client = betData['client']
+        self.Qty = betData['Qty']
         self.Qty_win = 0
         self.state = 0
-
-        print("test")
+        self.betTime = betData['betTime']  
         if self.ValidBet() ==  0 :
             self.CreateBet()
         else :
@@ -27,12 +26,10 @@ class bet :
         self.state = 1
 
         return
-        
-     
+            
     def PlayBet (self , NumberPlayRolute):
         self.Qty_win = 0
         self.state = 3
-        print("estado play" +  str( self.state ) )
         if self.type == 0 :
             self.ColorBet( NumberPlayRolute )
         elif  self.type == 1 :
@@ -53,7 +50,6 @@ class bet :
 
     def NumberBet (self , NumberPlayRolute) :
         self.state = 3
-        print("estado bet" +  str( self.state ) )
         if NumberPlayRolute == self.bet :
             self.state = 2
             self.Qty_win = self.Qty * 36
@@ -63,28 +59,24 @@ class bet :
     def ValidBet (self):
         ValidState=0 
         if  self.type > 1 :
-            print("Invalid type")
             ValidState = 1
         elif self.type == 0  and not 0 <= self.bet < MaxNumberColors :  # color bet
-            print("Invalid color")
             ValidState = 2
         elif self.type == 1  and not  MinNumbreRolute <= self.bet <= MaxNumbreRolute   : # number bet
-            print("Invalid number")
             ValidState = 3
         elif self.Qty > MaxQtyBet :
-            print("Invalid MaxQtyBet")
             ValidState = 4
        
         return ValidState
 
     def StrinValidations(self):
-        StrinValidations = ["Valid","Not Valid Type","Not Valid Color 0-Red 1-Black","Not Valid Number range 0-36","Not Valid qty max value $10.000"]
+        StrinValidationsbet = ["Valid","Not Valid Type","Not Valid Color 0-Red 1-Black","Not Valid Number range 0-36","Not Valid qty max value $10.000"]
 
-        return StrinValidations[ ( self.ValidBet()  ) ]
+        return StrinValidationsbet[ ( self.ValidBet()  ) ]
 
     def StrinStates(self):
-        StrinStates = ["Validaing" ,"Aceppted", "Win" , "Lose" , "Error"  ]
-        return StrinStates[ self.state  ]
+        StrinStatesbet = ["Validaing" ,"Aceppted", "Win" , "Lose" , "Error"  ]
+        return StrinStatesbet[ self.state  ]
 
     def StringBet(self):
         varTemp=""
@@ -92,9 +84,13 @@ class bet :
         if self.type == 0 :
             varTemp= StrinColor[self.bet]
         elif  self.type == 1 :
-            varTemp= "Bet Qty : " + str(self.bet)
+            varTemp=  str(self.bet)
 
         return varTemp
+
+    def StringTime(self) :
+
+        return self.betTime
 
     def StringTypeBet(self):
         StrinTypeBet = ["Color","Number"]
@@ -103,20 +99,22 @@ class bet :
 
     def StringMessageBet(self):
         tempMessageString = self.StrinStates()
-        print("estado" +  str( self.state ) )
         if self.state == 0 or self.state == 1 :
             tempMessageString = tempMessageString + '  TypeBet : '+ self.StringTypeBet()
+            tempMessageString = tempMessageString  +  ' Time : ' +  self.StringTime()
             tempMessageString = tempMessageString  +  ' Bet : ' +  self.StringBet()
             tempMessageString = tempMessageString  +  ' Value Bet : $' +  str (self.Qty) 
         elif self.state == 2:
             tempMessageString = 'Your Win !!!!!!'
             tempMessageString = tempMessageString + '  TypeBet : '+ self.StringTypeBet()
+            tempMessageString = tempMessageString  +  ' Time : ' +  self.StringTime()
             tempMessageString = tempMessageString  +  ' Bet : ' +  self.StringBet()
             tempMessageString = tempMessageString  +  ' Value Bet : $' +  str (self.Qty)
             tempMessageString = tempMessageString  +  ' Value WIN : $' +  str (self.Qty_win)
         elif self.state == 3:
             tempMessageString = 'Your Loss !!!!!!'
             tempMessageString = tempMessageString + '  TypeBet : '+ self.StringTypeBet()
+            tempMessageString = tempMessageString  +  ' Time : ' +  self.StringTime()
             tempMessageString = tempMessageString  +  ' Bet # ' +  str (self.bet)
             tempMessageString = tempMessageString  +  ' Value Bet : $' +  str (self.Qty)
         elif self.state == 4 : 

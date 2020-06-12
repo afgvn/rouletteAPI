@@ -9,10 +9,17 @@ def NewRoulute():
     SrtingState= newroulete.StateToString()
 
     return jsonify( Roulute_id = newroulete.id , Roulute_State = SrtingState)
-@app.route('/deleteRouletes', methods=['GET', 'POST'])
-def DeleteRoulute():
-    rouleteSection.ClousterRoulete.DeleteRoulete(1)
-    return jsonify( message = 'empty')
+@app.route('/deleteAllRouletes', methods=['GET', 'POST'])
+def DeleteAllRoulute():
+    rouleteSection.ClousterRoulete.DeleteAllDatas()
+
+    return jsonify( message = 'Allempty')
+
+@app.route('/deleteRouletes/<int:Roulute_id>', methods=['GET', 'POST'])
+def DeleteRoulute(Roulute_id):
+    rouleteSection.ClousterRoulete.DeleteRoulete ( Roulute_id )
+    
+    return jsonify( message = 'Delete Roulute')
 
 @app.route('/open/<int:Roulute_id>', methods=['GET', 'POST'])
 def openRoulute(Roulute_id):
@@ -42,12 +49,14 @@ def betRoulute(Roulute_id , Client_id , Type_bet, Bet ,  Qty_bet ):
             Bet_Message = "Error Roulute its close --  bet  cancelled"
             Bet_State = 4
             if  actulaRoulute.state == 1:
-                newBetReturn = actulaRoulute.NewBet(  Client_id , Type_bet , Bet , Qty_bet )   #client , type , bet , Qty 
-                Bet_State = newBetReturn['Bet_State']
-                Bet_Id = newBetReturn['Bet_Id']
-                Bet_Message = newBetReturn['Bet_Message']
+                print(actulaRoulute.BetsTable)
+                betData = { 'client' :  Client_id ,'type' : Type_bet , 'bet' : Bet , 'Qty' : Qty_bet  }
+                newBetReturn = actulaRoulute.NewBet(  betData )  
+                Bet_State = newBetReturn['Bet'].__dict__
+                Bet_Message = newBetReturn['Message']
+                Bet_Id = Bet_State['id']
 
-    return jsonify( Roulute_id = RouluteOpenid , Bet_Id= Bet_Id , Bet_State = Bet_State  ,Bet_Message = Bet_Message )
+    return jsonify( Roulute_id = RouluteOpenid , Bet_Id= Bet_Id , Bet = Bet_State  ,Bet_Message = Bet_Message )
 
 @app.route('/CloseBetRoulute/<int:Roulute_id>', methods=['GET', 'POST'])
 def CloseBetRoulute(Roulute_id  ):
@@ -66,7 +75,7 @@ def CloseBetRoulute(Roulute_id  ):
         RouluteOpenid = closeRoulute['Roulutte_id']
         Numbre_play =  closeRoulute['Numbre_play']
         for  VarBet in closeRoulute['Bets_List'] :
-            listBets.append({'MessageBet': VarBet.StringMessageBet() , 'StateBet': VarBet.state  })
+            listBets.append({'MessageBet': VarBet.StringMessageBet() , 'Bet': VarBet.__dict__ })
         actulaRoulute.ClearAllBets()
 
     return jsonify( Roulute_id = RouluteOpenid , Bets_List= listBets , ResultPlay =  Numbre_play   )
@@ -75,7 +84,7 @@ def CloseBetRoulute(Roulute_id  ):
 def StateRoulutes( ):
     Roulute_List = []
     for var in rouleteSection.ClousterRoulete.AllRouletes()  : 
-        Roulute_List.append( {'Roulute_Id' : var['id'] , 'Roulute_State' : var ['state'] , 'Roulute_Message' : "tes 34 " }  )   
+        Roulute_List.append( {'Roulute_Id' : var['id']  , 'Roulute_Message' : var['message'] , 'Roulute_Data' : var['roulete'].__dict__ ,  }  )   
 
     return jsonify( Roulute_List = Roulute_List  )
 
